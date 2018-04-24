@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>A Course</title>
+</head>
+<body>
+	<h1>A Single Course</h1>
+
+	<div th:each = "course: ${courses}">
+		<p th:text = "${course.name}"></p>
+		<p th:text = "${course.description}"></p>
+		
+	
+	<form method = "POST">
+	<button type="submit" th:value="${course.id}" name="courseId" th:formaction="@{del-course}"> delete </button>
+	</form>
+	
+	<a href="http://localhost:8080/show-courses">Back to home</a>
+	</div>
+
+</body>
+</html>
