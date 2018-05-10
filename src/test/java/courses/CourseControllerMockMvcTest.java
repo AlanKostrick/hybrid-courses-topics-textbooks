@@ -118,12 +118,12 @@ public class CourseControllerMockMvcTest {
 
 	@Test
 	public void shouldBeOkForAllTopics() throws Exception {
-		mvc.perform(get("/topics")).andExpect(status().isOk());
+		mvc.perform(get("/show-topics")).andExpect(status().isOk());
 	}
 
 	@Test
 	public void shouldRouteToAllTopicsView() throws Exception {
-		mvc.perform(get("/topics")).andExpect(view().name(is("topics")));
+		mvc.perform(get("/show-topics")).andExpect(view().name(is("topics")));
 	}
 
 	@Test
@@ -131,7 +131,7 @@ public class CourseControllerMockMvcTest {
 		Collection<Topic> allTopics = Arrays.asList(topic, anotherTopic);
 		when(topicRepo.findAll()).thenReturn(allTopics);
 
-		mvc.perform(get("/topics")).andExpect(model().attribute("topics", is(allTopics)));
+		mvc.perform(get("/show-topics")).andExpect(model().attribute("topics", is(allTopics)));
 	}
 
 }
