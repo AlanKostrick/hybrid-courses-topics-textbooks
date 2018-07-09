@@ -12,25 +12,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/topics")
 public class TopicRestController {
-	
+
 	@Resource
 	private CourseRepository courseRepo;
-	
+
 	@Resource
 	private TopicRepository topicRepo;
-	
+
 	@RequestMapping("")
-	public Iterable<Topic> findAllTopics(){
+	public Iterable<Topic> findAllTopics() {
 		return topicRepo.findAll();
 	}
-	
+
 	@RequestMapping("/{id}")
-	public Optional<Topic> findOneTopic(@PathVariable long id){
+	public Optional<Topic> findOneTopic(@PathVariable long id) {
 		return topicRepo.findById(id);
 	}
-	
+
 	@RequestMapping("/{topicName}/courses")
-	public Collection<Course> findAllCoursesByTopic(@PathVariable(value="topicName") String topicName){
+	public Collection<Course> findAllCoursesByTopic(@PathVariable(value = "topicName") String topicName) {
 		Topic topic = topicRepo.findByNameIgnoreCaseLike(topicName);
 		return courseRepo.findByTopicsContains(topic);
 	}

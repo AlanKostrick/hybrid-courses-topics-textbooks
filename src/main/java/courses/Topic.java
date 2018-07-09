@@ -15,7 +15,7 @@ public class Topic {
 	private long id;
 
 	private String name;
-	
+
 	@ManyToMany(mappedBy = "topics")
 	private Collection<Course> courses;
 
@@ -27,7 +27,7 @@ public class Topic {
 	public String getName() {
 		return name;
 	}
-	
+
 	public Collection<Course> getCourses() {
 		return courses;
 	}
@@ -63,8 +63,5 @@ public class Topic {
 			return false;
 		return true;
 	}
-
-	
-	
 
 }

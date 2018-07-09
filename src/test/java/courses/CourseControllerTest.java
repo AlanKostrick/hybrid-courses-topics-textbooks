@@ -28,7 +28,7 @@ public class CourseControllerTest {
 
 	@Mock
 	private Topic topic;
-	
+
 	@Mock
 	private Topic anotherTopic;
 
@@ -66,7 +66,7 @@ public class CourseControllerTest {
 	}
 
 	@Test
-	public void shouldAddSingleTopicToModel()throws TopicNotFoundException {
+	public void shouldAddSingleTopicToModel() throws TopicNotFoundException {
 		long arbitraryTopicId = 1;
 		when(topicRepo.findById(arbitraryTopicId)).thenReturn(Optional.of(topic));
 
@@ -83,7 +83,7 @@ public class CourseControllerTest {
 		underTest.findAllTopics(model);
 		verify(model).addAttribute("topics", allTopics);
 	}
-	
+
 	@Test
 	public void shouldAddAdditionalCoursesToModel() {
 		String topicName = "topic name";
@@ -94,7 +94,7 @@ public class CourseControllerTest {
 		Course newCourse = new Course(courseName, courseDescription, newTopic);
 		when(courseRepo.save(newCourse)).thenReturn(newCourse);
 	}
-	
+
 	@Test
 	public void shouldRemoveCourseFromModelByName() {
 		String courseName = course.getName();
@@ -102,25 +102,11 @@ public class CourseControllerTest {
 		underTest.deleteCourseByName(courseName);
 		verify(courseRepo).delete(course);
 	}
-	
+
 	@Test
 	public void shouldRemoveCourseFromModelById() {
 		underTest.deleteCourseById(courseId);
 		verify(courseRepo).deleteById(courseId);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }

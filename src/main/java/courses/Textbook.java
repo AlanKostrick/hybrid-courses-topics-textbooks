@@ -9,27 +9,25 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Textbook {
-	
+
 	@Id
 	@GeneratedValue
 	private long id;
-	
+
 	private String title;
-	
+
 	@JsonIgnore
 	@ManyToOne
 	private Course course;
-	
-	
-	
+
 	public Textbook() {
-		
+
 	}
 
 	public Textbook(String title, Course course) {
 		this.title = title;
 		this.course = course;
-		
+
 	}
 
 	@Override
@@ -53,7 +51,5 @@ public class Textbook {
 			return false;
 		return true;
 	}
-	
-	
 
 }

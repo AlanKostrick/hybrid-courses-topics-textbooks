@@ -27,7 +27,7 @@ public class Course {
 	@JsonIgnore
 	@ManyToMany
 	private Collection<Topic> topics;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "course")
 	private Collection<Textbook> textbooks;
@@ -46,25 +46,24 @@ public class Course {
 	}
 
 	public Collection<Topic> getTopics() {
-		
+
 		return topics;
 	}
-	
+
 	public Collection<Textbook> getTextbooks() {
-		
+
 		return textbooks;
 	}
-	
-	public Collection<String> getTopicsUrls(){
+
+	public Collection<String> getTopicsUrls() {
 		Collection<String> urls = new ArrayList<>();
-		for(Topic t: topics) {
+		for (Topic t : topics) {
 			urls.add(format("/courses/%d/topics/%s", this.getId(), t.getName().toLowerCase()));
 		}
-		
+
 		return urls;
 	}
-	
-	
+
 	public Course() {
 
 	}
@@ -96,9 +95,5 @@ public class Course {
 			return false;
 		return true;
 	}
-
-	
-	
-
 
 }

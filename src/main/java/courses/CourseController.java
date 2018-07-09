@@ -60,7 +60,7 @@ public class CourseController {
 	public String addCourse(String courseName, String courseDescription, String topicName) {
 
 		Topic topic = topicRepo.findByName(topicName);
-		if(topic == null) {
+		if (topic == null) {
 			topic = new Topic(topicName);
 			topicRepo.save(topic);
 		}
