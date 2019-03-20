@@ -1,0 +1,14 @@
+<h3>You just added a topic with an Ajax Request!</h3>
+<h4>Our updated list of Topics is now...</h4>
+
+
+<section class="topics-list">
+	<ul>
+		<li th:if="${topics.size() ==0}">Currently no topics...please add
+			one!</li>
+		<li th:if="${topics.size() !=0}" th:each="topic: ${topics}"><input
+			class="topicId" name="id" type="hidden" th:value="${topic.id}" /> <a
+			th:href="@{/topic(id=${topic.id})}" th:text="${topic.name}"></a>
+			<button class="x">&times;</button></li>
+	</ul>
+</section>

@@ -63,5 +63,9 @@ public class Topic {
 			return false;
 		return true;
 	}
+	
+	public void removeCourse(Course toRemove) {
+		courses.remove(toRemove);
+	}
 
 }

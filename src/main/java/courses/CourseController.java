@@ -6,7 +6,9 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -18,12 +20,16 @@ public class CourseController {
 	@Resource
 	TopicRepository topicRepo;
 
+	@Resource
+	TextbookRepository textbookRepo;
+
 	@RequestMapping("/course")
 	public String findOneCourse(@RequestParam(value = "id") long id, Model model) throws CourseNotFoundException {
 		Optional<Course> course = courseRepo.findById(id);
 
 		if (course.isPresent()) {
 			model.addAttribute("courses", course.get());
+			model.addAttribute("course", course.get());
 			return "course";
 		}
 		throw new CourseNotFoundException();
@@ -77,9 +83,15 @@ public class CourseController {
 	@RequestMapping("/delete-course")
 	public String deleteCourseByName(String courseName) {
 
-		if (courseRepo.findByName(courseName) != null) {
-			Course deletedCourse = courseRepo.findByName(courseName);
-			courseRepo.delete(deletedCourse);
+		Course foundCourse = courseRepo.findByName(courseName);
+
+		if (foundCourse != null) {
+
+			for (Textbook text : foundCourse.getTextbooks()) {
+				textbookRepo.delete(text);
+			}
+
+			courseRepo.delete(foundCourse);
 		}
 
 		return "redirect:/show-courses";
@@ -89,8 +101,14 @@ public class CourseController {
 	@RequestMapping("/del-course")
 	public String deleteCourseById(Long courseId) {
 
-		courseRepo.deleteById(courseId);
+		Optional<Course> foundCourseResult = courseRepo.findById(courseId);
+		Course courseToRemove = foundCourseResult.get();
 
+		for (Textbook text : courseToRemove.getTextbooks()) {
+			textbookRepo.delete(text);
+		}
+
+		courseRepo.deleteById(courseId);
 		return "redirect:/show-courses";
 
 	}
@@ -108,6 +126,34 @@ public class CourseController {
 		model.addAttribute("courses", courseRepo.findAllByOrderByNameAsc());
 
 		return "courses";
+	}
+
+	@RequestMapping(path = "/topics/{topicName}", method = RequestMethod.POST)
+	public String addTopic(@PathVariable String topicName, Model model) {
+		Topic topicToAdd = topicRepo.findByName(topicName);
+		if (topicToAdd == null) {
+			topicToAdd = new Topic(topicName);
+			topicRepo.save(topicToAdd);
+		}
+		model.addAttribute("topics", topicRepo.findAll());
+		return "partials/topics-list-added";
+	}
+
+
+	@RequestMapping(path = "/topics/remove/{id}", method = RequestMethod.POST)
+	public String removeTopic(@PathVariable Long id, Model model) {
+
+		Optional<Topic> topicToRemoveResult = topicRepo.findById(id);
+		Topic topicToRemove = topicToRemoveResult.get();
+
+		for (Course course : topicToRemove.getCourses()) {
+			course.removeTopic(topicToRemove);
+			courseRepo.save(course);
+		}
+
+		topicRepo.delete(topicToRemove);
+		model.addAttribute("topics", topicRepo.findAll());
+		return "partials/topics-list-removed";
 	}
 
 }

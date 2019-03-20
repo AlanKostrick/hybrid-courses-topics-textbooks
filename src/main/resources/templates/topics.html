@@ -10,12 +10,24 @@
 	<header>
 		<h1>A List of Topics</h1>
 	</header>
-
-	<div th:each="topic: ${topics}">
-		<h2>
-			<a th:href="@{/topic(id=${topic.id})}" th:text="${topic.name}"></a>
-		</h2>
-	</div>
+	
+		<section class="add-topic">
+		<input type="text" placeholder="add a topic"/>
+		<button>Submit</button>
+		</section>
+		
+	
+	<section class="topics-list">
+		<ul>
+			<li th:if="${topics.size() ==0}">Currently no topics...please add one!</li>
+			<li th:if="${topics.size() !=0}" th:each="topic: ${topics}">
+			  <input class="topicId" name="id" type="hidden" th:value="${topic.id}"/>
+			  <a th:href="@{/topic(id=${topic.id})}" th:text="${topic.name}"></a>
+			  <button class="x">&times;</button></li>
+		</ul>
+	</section>
+	
+	<script src = "./js/server-requests.js"></script>
 
 </body>
 </html>

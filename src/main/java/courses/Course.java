@@ -96,4 +96,9 @@ public class Course {
 		return true;
 	}
 
+	public void removeTopic(Topic topicToRemove) {
+		topics.remove(topicToRemove);
+		
+	}
+
 }

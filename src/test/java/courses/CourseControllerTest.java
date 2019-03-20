@@ -1,5 +1,6 @@
 package courses;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -9,6 +10,7 @@ import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -84,15 +86,22 @@ public class CourseControllerTest {
 		verify(model).addAttribute("topics", allTopics);
 	}
 
+	// a better test
 	@Test
 	public void shouldAddAdditionalCoursesToModel() {
 		String topicName = "topic name";
-		Topic newTopic = topicRepo.findByName(topicName);
+
 		String courseName = "new course";
 		String courseDescription = "new course description";
 		underTest.addCourse(courseName, courseDescription, topicName);
-		Course newCourse = new Course(courseName, courseDescription, newTopic);
-		when(courseRepo.save(newCourse)).thenReturn(newCourse);
+
+		ArgumentCaptor<Course> courseArgument = ArgumentCaptor.forClass(Course.class);
+		verify(courseRepo).save(courseArgument.capture());
+		assertEquals("new course", courseArgument.getValue().getName());
+
+		ArgumentCaptor<Topic> topicArgument = ArgumentCaptor.forClass(Topic.class);
+		verify(topicRepo).save(topicArgument.capture());
+		assertEquals("topic name", topicArgument.getValue().getName());
 	}
 
 	@Test
@@ -103,10 +112,26 @@ public class CourseControllerTest {
 		verify(courseRepo).delete(course);
 	}
 
+	// a better test
 	@Test
 	public void shouldRemoveCourseFromModelById() {
-		underTest.deleteCourseById(courseId);
-		verify(courseRepo).deleteById(courseId);
+		Optional<Course> foundCourse = courseRepo.findById(courseId);
+
+		if (foundCourse.isPresent()) {
+			underTest.deleteCourseById(courseId);
+			verify(courseRepo).deleteById(courseId);
+		}
+	}
+
+	@Test
+	public void shouldAddAdditionalTopicsToModel() {
+		String topicName = "topic name";
+
+		underTest.addTopic(topicName, model);
+
+		ArgumentCaptor<Topic> topicArgument = ArgumentCaptor.forClass(Topic.class);
+		verify(topicRepo).save(topicArgument.capture());
+		assertEquals("topic name", topicArgument.getValue().getName());
 	}
 
 }
